@@ -40,7 +40,8 @@ preserve_url_hash() {
 
 command_generator() {
 	local command_string="$1"
-	echo "$(preserve_url_hash) | xargs -I {} tmux run-shell -b 'cd #{pane_current_path}; $command_string \"{}\" > /dev/null'"
+	# the `echo {} | bash` is to perform tilde expansion.
+	echo "$(preserve_url_hash) | xargs -I {} echo "echo {}" | bash | xargs -I {} tmux run-shell -b 'cd #{pane_current_path}; $command_string \"{}\" > /dev/null'"
 }
 
 search_command_generator() {
